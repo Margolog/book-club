@@ -1,7 +1,6 @@
 # Проект автоматизации тестирования API Book Club
 
 Проект содержит автоматизированные API-тесты сервиса [Book Club](https://book-club.qa.guru).  
-Тесты проверяют регистрацию и авторизацию пользователей, выход из системы, изменение профиля и работу с книжными клубами.
 
 ## Содержание
 
@@ -84,7 +83,7 @@ src/test/resources
 
 ## Локальный запуск
 
-Требуется Java 17 или новее. Дополнительно устанавливать Gradle не нужно — проект содержит Gradle Wrapper.
+Требуется Java 17 или новее. 
 
 ```bash
 ./gradlew clean test
@@ -114,8 +113,7 @@ src/test/resources
 ./gradlew clean test -Denv=remote
 ```
 
-В этом режиме используются настройки из `remote.properties`. Системные параметры имеют приоритет над properties-файлами, поэтому Jenkins также может передавать `-DbaseUri` и `-DbasePath` без изменения кода.
-
+В этом режиме используются настройки из `remote.properties`. 
 ## Allure Report
 
 После завершения сборки Jenkins публикует [Allure Report](https://jenkins.qa.guru/job/41-m_a_l_qa-diploma-api/lastSuccessfulBuild/allure/). Отчёт содержит:
@@ -126,7 +124,6 @@ src/test/resources
 - HTTP-запросы и ответы, добавленные через шаблоны `request.ftl` и `response.ftl`;
 - историю запусков.
 
-[![История запусков в Jenkins](images/allure%20cs3.png)](https://jenkins.qa.guru/job/41-m_a_l_qa-diploma-api/)
 
 [![Графики Allure Report](images/allure%20graf%203.png)](https://jenkins.qa.guru/job/41-m_a_l_qa-diploma-api/lastSuccessfulBuild/allure/#graph)
 
