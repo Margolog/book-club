@@ -3,16 +3,16 @@ package specs.profile;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.ResponseSpecification;
 
-import static io.restassured.filter.log.LogDetail.ALL;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.notNullValue;
+import static specs.BaseSpec.baseResponseSpec;
 
 
 public class ProfileSpec {
 
     public static ResponseSpecification successfulUpdateUserResponseSpec =
             new ResponseSpecBuilder()
-                    .log(ALL)
+                    .addResponseSpecification(baseResponseSpec)
                     .expectStatusCode(200)
                     .expectBody(matchesJsonSchemaInClasspath(
                             "schemas/profile/successful_update_user_response_schema.json"))
@@ -26,7 +26,7 @@ public class ProfileSpec {
 
     public static ResponseSpecification updateUserRequiredFieldsResponseSpec =
             new ResponseSpecBuilder()
-                    .log(ALL)
+                    .addResponseSpecification(baseResponseSpec)
                     .expectStatusCode(400)
                     .expectBody(matchesJsonSchemaInClasspath(
                             "schemas/profile/update_user_required_fields_response_schema.json"))
@@ -37,7 +37,7 @@ public class ProfileSpec {
 
     public static ResponseSpecification updateUserAllRequiredFieldsResponseSpec =
             new ResponseSpecBuilder()
-                    .log(ALL)
+                    .addResponseSpecification(baseResponseSpec)
                     .expectStatusCode(400)
                     .expectBody(matchesJsonSchemaInClasspath(
                             "schemas/profile/update_user_all_required_fields_response_schema.json"))
@@ -49,7 +49,7 @@ public class ProfileSpec {
 
     public static ResponseSpecification patchUserEmptyFieldsResponseSpec =
             new ResponseSpecBuilder()
-                    .log(ALL)
+                    .addResponseSpecification(baseResponseSpec)
                     .expectStatusCode(400)
                     .expectBody(matchesJsonSchemaInClasspath(
                             "schemas/profile/patch_user_empty_fields_response_schema.json"))

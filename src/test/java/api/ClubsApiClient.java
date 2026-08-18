@@ -6,14 +6,13 @@ import models.clubs.ClubResponseModel;
 import models.clubs.SuccessfulGetClubsResponseModel;
 
 import static io.restassured.RestAssured.given;
-import static specs.BaseSpec.baseRequestSpec;
 import static specs.clubs.ClubsSpec.*;
 
 public class ClubsApiClient {
 
     @Step("Создание clubs")
     public ClubResponseModel createClub(String accessToken, ClubsBodyModel body) {
-        return given(baseRequestSpec)
+        return given()
                 .header("Authorization", "Bearer " + accessToken)
                 .body(body)
                 .when()
@@ -27,7 +26,7 @@ public class ClubsApiClient {
 
     @Step("Получение clubs по поиску")
     public SuccessfulGetClubsResponseModel getClubs(String accessToken, String search) {
-        return given(baseRequestSpec)
+        return given()
                 .header("Authorization", "Bearer " + accessToken)
                 .queryParam("search", search)
                 .when()
@@ -40,7 +39,7 @@ public class ClubsApiClient {
 
     @Step("Проверка что определенный клуб удален")
     public void checkClubNotFoundById(String accessToken, Integer id) {
-        given(baseRequestSpec)
+        given()
                 .header("Authorization", "Bearer " + accessToken)
                 .when()
                 .get("/clubs/{id}/", id)
@@ -50,7 +49,7 @@ public class ClubsApiClient {
 
     @Step("Обновление клуба")
     public ClubResponseModel patchClubs(String accessToken, Integer id, ClubsBodyModel body) {
-        return given(baseRequestSpec)
+        return given()
                 .header("Authorization", "Bearer " + accessToken)
                 .when()
                 .body(body)
@@ -63,7 +62,7 @@ public class ClubsApiClient {
 
     @Step("Удаление клуба")
     public void deleteClubs(String accessToken, Integer id) {
-        given(baseRequestSpec)
+        given()
                 .header("Authorization", "Bearer " + accessToken)
                 .when()
                 .delete("/clubs/{id}/", id)

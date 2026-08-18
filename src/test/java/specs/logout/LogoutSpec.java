@@ -1,23 +1,21 @@
 package specs.logout;
 
 import io.restassured.builder.ResponseSpecBuilder;
-import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
-import static io.restassured.filter.log.LogDetail.ALL;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.notNullValue;
-import static specs.BaseSpec.baseRequestSpec;
+import static specs.BaseSpec.baseResponseSpec;
 
 public class LogoutSpec {
 
     public static ResponseSpecification successfulLogoutResponseSpec = new ResponseSpecBuilder()
-            .log(ALL)
+            .addResponseSpecification(baseResponseSpec)
             .expectStatusCode(200)
             .build();
 
     public static ResponseSpecification logoutWithoutTokenRequestSpec = new ResponseSpecBuilder()
-            .log(ALL)
+            .addResponseSpecification(baseResponseSpec)
             .expectStatusCode(400)
             .expectBody(matchesJsonSchemaInClasspath(
                     "schemas/logout/logout_without_token_response_schema.json"))
@@ -25,7 +23,7 @@ public class LogoutSpec {
             .build();
 
     public static ResponseSpecification logoutWithWrongTokenRequestSpec = new ResponseSpecBuilder()
-            .log(ALL)
+            .addResponseSpecification(baseResponseSpec)
             .expectStatusCode(401)
             .expectBody(matchesJsonSchemaInClasspath(
                     "schemas/logout/logout_with_wrong_token_response_schema.json"))

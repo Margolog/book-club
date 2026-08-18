@@ -1,19 +1,17 @@
 package specs.login;
 
 import io.restassured.builder.ResponseSpecBuilder;
-import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
-import static io.restassured.filter.log.LogDetail.ALL;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.notNullValue;
-import static specs.BaseSpec.baseRequestSpec;
+import static specs.BaseSpec.baseResponseSpec;
 
 
 public class LoginSpec {
 
     public static ResponseSpecification successfulLoginResponseSpec = new ResponseSpecBuilder()
-            .log(ALL)
+            .addResponseSpecification(baseResponseSpec)
             .expectStatusCode(200)
             .expectBody(matchesJsonSchemaInClasspath(
                     "schemas/login/successful_login_response_schema.json"))
@@ -22,7 +20,7 @@ public class LoginSpec {
             .build();
 
     public static ResponseSpecification wrongCredentialsLoginResponseSpec = new ResponseSpecBuilder()
-            .log(ALL)
+            .addResponseSpecification(baseResponseSpec)
             .expectStatusCode(401)
             .expectBody(matchesJsonSchemaInClasspath(
                     "schemas/login/wrong_login_response_schema.json"))
@@ -30,7 +28,7 @@ public class LoginSpec {
             .build();
 
     public static ResponseSpecification emptyCredentialsLoginResponseSpec = new ResponseSpecBuilder()
-            .log(ALL)
+            .addResponseSpecification(baseResponseSpec)
             .expectStatusCode(400)
             .expectBody(matchesJsonSchemaInClasspath(
                     "schemas/login/empty_login_response_schema.json"))
@@ -38,7 +36,7 @@ public class LoginSpec {
             .build();
 
     public static ResponseSpecification emptyCredentialsPasswordResponseSpec = new ResponseSpecBuilder()
-            .log(ALL)
+            .addResponseSpecification(baseResponseSpec)
             .expectStatusCode(400)
             .expectBody(matchesJsonSchemaInClasspath(
                     "schemas/login/empty_password_response_schema.json"))
@@ -46,7 +44,7 @@ public class LoginSpec {
             .build();
 
     public static ResponseSpecification emptyCredentialsResponseSpec = new ResponseSpecBuilder()
-            .log(ALL)
+            .addResponseSpecification(baseResponseSpec)
             .expectStatusCode(400)
             .expectBody(matchesJsonSchemaInClasspath(
                     "schemas/login/empty_password_and_login_response_schema.json"))

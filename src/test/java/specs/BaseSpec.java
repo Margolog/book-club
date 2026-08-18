@@ -1,7 +1,9 @@
 package specs;
 
 import config.ApiConfig;
+import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.aeonbits.owner.ConfigFactory;
 
 import static allure.CustomAllureListener.withCustomTemplate;
@@ -18,4 +20,8 @@ public class BaseSpec {
             .contentType(JSON)
             .baseUri(config.baseUri())
             .basePath(config.basePath());
+
+    public static ResponseSpecification baseResponseSpec = new ResponseSpecBuilder()
+            .log(io.restassured.filter.log.LogDetail.ALL)
+            .build();
 }
