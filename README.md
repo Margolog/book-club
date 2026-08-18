@@ -6,10 +6,11 @@
 
 - [Технологии и инструменты](#технологии-и-инструменты)
 - [Покрытый функционал](#покрытый-функционал)
-- [Структура проекта](#структура-проекта)
 - [Локальный запуск](#локальный-запуск)
 - [Запуск в Jenkins](#запуск-в-jenkins)
 - [Allure Report](#allure-report)
+- [Allure TestOps](#allure-testops)
+- [Интеграция с Jira](#интеграция-с-jira)
 - [Уведомления в Telegram](#уведомления-в-telegram)
 
 ## Технологии и инструменты
@@ -19,16 +20,16 @@
 ![JUnit 5](https://img.shields.io/badge/JUnit_5-5.10-25A162?logo=junit5&logoColor=white)
 ![REST Assured](https://img.shields.io/badge/REST_Assured-5.5-43B02A)
 ![Allure](https://img.shields.io/badge/Allure_Report-2.40-FCC525)
+![Allure TestOps](https://img.shields.io/badge/Allure_TestOps-Test_management-744C9E)
 ![Jenkins](https://img.shields.io/badge/Jenkins-CI%2FCD-D24939?logo=jenkins&logoColor=white)
+![Jira](https://img.shields.io/badge/Jira-Issue_tracking-0052CC?logo=jira&logoColor=white)
 
 - Java и Gradle
 - JUnit 5
 - REST Assured
 - AssertJ и Hamcrest
-- JSON Schema Validator
-- Jackson
-- Datafaker
-- Allure Report 
+- Allure TestOps
+- Jira
 - Jenkins и Telegram Bot
 
 ## Покрытый функционал
@@ -63,24 +64,6 @@
 
 Все сценарии проверяют HTTP status code. Для ответов также используются проверки JSON Schema, значений по JSON path и десериализованных DTO-моделей.
 
-## Структура проекта
-
-```text
-src/test/java
-├── allure     # подключение шаблонов Allure
-├── api        # методы взаимодействия с API
-├── config     # конфигурация локального и удалённого запуска
-├── models     # request/response DTO
-├── specs      # спецификации REST Assured
-└── tests      # тесты и генерация тестовых данных
-
-src/test/resources
-├── schemas            # JSON-схемы ответов
-├── tpl                # шаблоны логирования запросов и ответов Allure
-├── local.properties   # настройки локального запуска
-└── remote.properties  # настройки запуска в Jenkins
-```
-
 ## Локальный запуск
 
 Требуется Java 17 или новее. 
@@ -114,6 +97,7 @@ src/test/resources
 ```
 
 В этом режиме используются настройки из `remote.properties`. 
+
 ## Allure Report
 
 После завершения сборки Jenkins публикует [Allure Report](https://jenkins.qa.guru/job/41-m_a_l_qa-diploma-api/lastSuccessfulBuild/allure/). Отчёт содержит:
@@ -121,16 +105,33 @@ src/test/resources
 - результаты и длительность тестов;
 - группировку по feature и story;
 - шаги тестов;
-- HTTP-запросы и ответы, добавленные через шаблоны `request.ftl` и `response.ftl`;
+- HTTP-запросы и ответы;
 - историю запусков.
 
 
 [![Графики Allure Report](images/allure%20graf%203.png)](https://jenkins.qa.guru/job/41-m_a_l_qa-diploma-api/lastSuccessfulBuild/allure/#graph)
 
+## Allure TestOps
+
+Результаты запусков из Jenkins автоматически отправляются в проект [Book Club в Allure TestOps](https://allure.qa.guru/project/5350/test-cases?treeId=0). В TestOps доступны:
+
+- [тест-кейсы проекта](https://allure.qa.guru/project/5350/test-cases?treeId=0);
+- [история запусков](https://allure.qa.guru/project/5350/launches);
+- [Jenkins job](https://allure.qa.guru/project/5350/jobs), связанная с удалёнными прогонами;
+- интеграция с Jira для связи запусков и тест-кейсов с задачами.
+
+[![Allure TestOps](images/Allure%20TestOps%20Dashboard2.png)](https://allure.qa.guru/project/5350/test-cases?treeId=0)
+
+## Интеграция с Jira
+
+Проект связан с задачей [MUL-34 — «Смоук API автотесты для Book Club»](https://jira.qa.guru/browse/MUL-34). Успешный запуск Jenkins №9 передан в Allure TestOps и отображается в Jira в блоке **Allure: Launches** с результатом 26 успешно выполненных тестов.
+
+[![Интеграция Jira и Allure TestOps](images/jira3.png)](https://jira.qa.guru/browse/MUL-34)
+
 ## Уведомления в Telegram
 
 После завершения Jenkins job Telegram-бот отправляет уведомление с результатом прогона и ссылкой на Allure Report.
 
-Работа интеграции подтверждена [контрольной сборкой №5](https://jenkins.qa.guru/job/41-m_a_l_qa-diploma-api/5/): 26 тестов успешно выполнены, сообщение с диаграммой и ссылкой на отчёт отправлено.
+Работа интеграции подтверждена [контрольной сборкой №9](https://jenkins.qa.guru/job/41-m_a_l_qa-diploma-api/9/): 26 тестов успешно выполнены, сообщение с диаграммой и ссылкой на отчёт отправлено.
 
-[![Уведомление о результатах тестов в Telegram](images/telegram3.png)](https://jenkins.qa.guru/job/41-m_a_l_qa-diploma-api/5/allure/)
+[![Уведомление о результатах тестов в Telegram](images/telegram3.png)](https://jenkins.qa.guru/job/41-m_a_l_qa-diploma-api/9/allure/)
