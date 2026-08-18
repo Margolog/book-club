@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static tests.testData.UserData.*;
 
 @Feature("Регистрация")
-public class RegistrationTests extends TestBase {
+public class RegistrationTests extends BaseTest {
 
     UserData userData;
 

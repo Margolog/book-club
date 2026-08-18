@@ -17,7 +17,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static tests.testData.UserData.*;
 
 @Feature("Logout")
-public class LogoutTests extends TestBase {
+public class LogoutTests extends BaseTest {
 
     UserData userData;
 

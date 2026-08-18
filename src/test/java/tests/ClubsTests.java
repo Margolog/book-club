@@ -16,7 +16,7 @@ import static io.qameta.allure.Allure.step;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Feature("Книжные клубы")
-public class ClubsTests extends TestBase {
+public class ClubsTests extends BaseTest {
 
     ClubData clubData;
     UserData userData;
