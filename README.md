@@ -28,7 +28,7 @@
 - JSON Schema Validator
 - Jackson
 - Datafaker
-- Allure Report с кастомными шаблонами запросов и ответов
+- Allure Report 
 - Jenkins и Telegram Bot
 
 ## Покрытый функционал
