@@ -15,4 +15,3 @@ public class BaseTest {
         RestAssured.requestSpecification = baseRequestSpec;
     }
 }
-
