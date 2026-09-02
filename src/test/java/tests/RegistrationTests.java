@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import tests.testData.UserData;
 
+import static io.qameta.allure.Allure.step;
 import static org.assertj.core.api.Assertions.assertThat;
 import static tests.testData.UserData.*;
 
@@ -26,13 +27,14 @@ public class RegistrationTests extends BaseTest {
         SuccessfulRegistrationResponseModel registrationResponse =
                 api.users.register(new RegistrationBodyModel(userData.username, userData.password));
 
-        assertThat(registrationResponse.id()).isGreaterThan(0);
-        assertThat(registrationResponse.username()).isEqualTo(userData.username);
-        assertThat(registrationResponse.firstName()).isEqualTo("");
-        assertThat(registrationResponse.lastName()).isEqualTo("");
-        assertThat(registrationResponse.email()).isEqualTo("");
-
-        assertThat(registrationResponse.remoteAddr()).matches(REGISTRATION_IP_REGEXP);
+        step("Проверить данные зарегистрированного пользователя", () -> {
+            assertThat(registrationResponse.id()).isGreaterThan(0);
+            assertThat(registrationResponse.username()).isEqualTo(userData.username);
+            assertThat(registrationResponse.firstName()).isEmpty();
+            assertThat(registrationResponse.lastName()).isEmpty();
+            assertThat(registrationResponse.email()).isEmpty();
+            assertThat(registrationResponse.remoteAddr()).matches(REGISTRATION_IP_REGEXP);
+        });
     }
 
     @Test
@@ -43,14 +45,15 @@ public class RegistrationTests extends BaseTest {
         SuccessfulRegistrationResponseModel firstRegistrationResponse =
                 api.users.register(registrationData);
 
-        assertThat(firstRegistrationResponse.username()).isEqualTo(userData.username);
+        step("Проверить успешную первичную регистрацию", () ->
+                assertThat(firstRegistrationResponse.username()).isEqualTo(userData.username));
 
         ExistingUserResponseModel secondRegistrationResponse =
                 api.users.registerExistingUser(registrationData);
 
-        String expectedError = REGISTRATION_EXISTING_USER_ERROR;
-        String actualError = secondRegistrationResponse.username().get(0);
-        assertThat(actualError).isEqualTo(expectedError);
+        step("Проверить ошибку повторной регистрации", () ->
+                assertThat(secondRegistrationResponse.username())
+                        .containsExactly(REGISTRATION_EXISTING_USER_ERROR));
     }
 
     @Test
@@ -59,9 +62,9 @@ public class RegistrationTests extends BaseTest {
         RegistrationPasswordErrorResponseModel registrationWithoutPassword =
                 api.users.registrationWithoutPassword(new RegistrationBodyModel(userData.username, ""));
 
-        String expectedDetailError = EMPTY_CREDENTIALS_ERROR;
-        String actualDetailError = registrationWithoutPassword.password().get(0);
-        assertThat(actualDetailError).isEqualTo(expectedDetailError);
+        step("Проверить ошибку в поле password", () ->
+                assertThat(registrationWithoutPassword.password())
+                        .containsExactly(EMPTY_CREDENTIALS_ERROR));
     }
 
     @Test
@@ -69,9 +72,9 @@ public class RegistrationTests extends BaseTest {
     public void registrationWithoutUsernameTest() {
         RegistrationWithoutUserNameResponseModel registrationWithoutUserName =
                 api.users.registrationWithoutUserName(new RegistrationBodyModel("", userData.password));
-        String expectedDetailError = EMPTY_CREDENTIALS_ERROR;
-        String actualDetailError = registrationWithoutUserName.username().get(0);
-        assertThat(actualDetailError).isEqualTo(expectedDetailError);
+        step("Проверить ошибку в поле username", () ->
+                assertThat(registrationWithoutUserName.username())
+                        .containsExactly(EMPTY_CREDENTIALS_ERROR));
     }
 
     @Test
@@ -80,8 +83,10 @@ public class RegistrationTests extends BaseTest {
         RegistrationWithoutUsernameAndPasswordResponseModel response =
                 api.users.registrationWithoutUsernameAndPassword(new RegistrationBodyModel("", ""));
 
-        assertThat(response.username()).containsExactly(EMPTY_CREDENTIALS_ERROR);
-        assertThat(response.password()).containsExactly(EMPTY_CREDENTIALS_ERROR);
+        step("Проверить ошибки в полях username и password", () -> {
+            assertThat(response.username()).containsExactly(EMPTY_CREDENTIALS_ERROR);
+            assertThat(response.password()).containsExactly(EMPTY_CREDENTIALS_ERROR);
+        });
     }
 
     @Test
@@ -91,7 +96,8 @@ public class RegistrationTests extends BaseTest {
                 api.users.registrationWithLongPassword(
                         new RegistrationBodyModel(userData.username, userData.longPassword));
 
-        assertThat(response.password()).containsExactly(LONG_PASSWORD_ERROR);
+        step("Проверить ошибку ограничения длины password", () ->
+                assertThat(response.password()).containsExactly(LONG_PASSWORD_ERROR));
     }
 
     @Test
@@ -100,7 +106,9 @@ public class RegistrationTests extends BaseTest {
         RegistrationWithoutUsernameAndPasswordResponseModel response =
                 api.users.registrationWithoutUsernameAndPassword(new RegistrationBodyModel(null, null));
 
-        assertThat(response.username()).containsExactly(NULL_CREDENTIALS_ERROR);
-        assertThat(response.password()).containsExactly(NULL_CREDENTIALS_ERROR);
+        step("Проверить ошибки для null в username и password", () -> {
+            assertThat(response.username()).containsExactly(NULL_CREDENTIALS_ERROR);
+            assertThat(response.password()).containsExactly(NULL_CREDENTIALS_ERROR);
+        });
     }
 }
