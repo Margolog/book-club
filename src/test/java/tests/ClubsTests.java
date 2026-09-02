@@ -32,8 +32,8 @@ public class ClubsTests extends BaseTest {
     public void successfulCreateClubTest() {
         api.users.register(new RegistrationBodyModel(userData.username, userData.password));
 
-        LoginBodyModel loginData = new LoginBodyModel(userData.username, userData.password);
-        String accessToken = api.auth.loginAndGetAccessToken(loginData);
+        String accessToken = api.auth.loginAndGetAccessToken(
+                new LoginBodyModel(userData.username, userData.password));
 
         ClubsBodyModel clubBody = new ClubsBodyModel(
                 clubData.bookTitle,
@@ -63,8 +63,8 @@ public class ClubsTests extends BaseTest {
     public void successfulGetClubsTest() {
         api.users.register(new RegistrationBodyModel(userData.username, userData.password));
 
-        LoginBodyModel loginData = new LoginBodyModel(userData.username, userData.password);
-        String accessToken = api.auth.loginAndGetAccessToken(loginData);
+        String accessToken = api.auth.loginAndGetAccessToken(
+                new LoginBodyModel(userData.username, userData.password));
 
         ClubsBodyModel clubBody = new ClubsBodyModel(
                 clubData.bookTitle,
@@ -94,8 +94,8 @@ public class ClubsTests extends BaseTest {
     public void changeBookTitleTest() {
         api.users.register(new RegistrationBodyModel(userData.username, userData.password));
 
-        LoginBodyModel loginData = new LoginBodyModel(userData.username, userData.password);
-        String accessToken = api.auth.loginAndGetAccessToken(loginData);
+        String accessToken = api.auth.loginAndGetAccessToken(
+                new LoginBodyModel(userData.username, userData.password));
 
         ClubsBodyModel clubBody = new ClubsBodyModel(
                 clubData.bookTitle,
@@ -129,8 +129,8 @@ public class ClubsTests extends BaseTest {
     public void deleteClubTest() {
         api.users.register(new RegistrationBodyModel(userData.username, userData.password));
 
-        LoginBodyModel loginData = new LoginBodyModel(userData.username, userData.password);
-        String accessToken = api.auth.loginAndGetAccessToken(loginData);
+        String accessToken = api.auth.loginAndGetAccessToken(
+                new LoginBodyModel(userData.username, userData.password));
 
         ClubsBodyModel clubBody = new ClubsBodyModel(
                 clubData.bookTitle,
