@@ -35,10 +35,8 @@ public class UpdateUserTests extends BaseTest {
                 registeredUserData.password
         ));
 
-        LoginBodyModel loginData =
-                new LoginBodyModel(registeredUserData.username, registeredUserData.password);
-
-        String accessToken = api.auth.loginAndGetAccessToken(loginData);
+        String accessToken = api.auth.loginAndGetAccessToken(
+                new LoginBodyModel(registeredUserData.username, registeredUserData.password));
 
         UpdateUserBodyModel updateData = new UpdateUserBodyModel(
                 updatedUserData.username,
@@ -68,10 +66,8 @@ public class UpdateUserTests extends BaseTest {
                 registeredUserData.password
         ));
 
-        LoginBodyModel loginData =
-                new LoginBodyModel(registeredUserData.username, registeredUserData.password);
-
-        String accessToken = api.auth.loginAndGetAccessToken(loginData);
+        String accessToken = api.auth.loginAndGetAccessToken(
+                new LoginBodyModel(registeredUserData.username, registeredUserData.password));
 
         UpdateUserOnlyUsernameBodyModel updateData =
                 new UpdateUserOnlyUsernameBodyModel(updatedUserData.username);
@@ -95,10 +91,8 @@ public class UpdateUserTests extends BaseTest {
                 registeredUserData.password
         ));
 
-        LoginBodyModel loginData =
-                new LoginBodyModel(registeredUserData.username, registeredUserData.password);
-
-        String accessToken = api.auth.loginAndGetAccessToken(loginData);
+        String accessToken = api.auth.loginAndGetAccessToken(
+                new LoginBodyModel(registeredUserData.username, registeredUserData.password));
 
         UpdateUserEmptyBodyModel updateData = new UpdateUserEmptyBodyModel();
 
@@ -122,10 +116,8 @@ public class UpdateUserTests extends BaseTest {
                 registeredUserData.password
         ));
 
-        LoginBodyModel loginData =
-                new LoginBodyModel(registeredUserData.username, registeredUserData.password);
-
-        String accessToken = api.auth.loginAndGetAccessToken(loginData);
+        String accessToken = api.auth.loginAndGetAccessToken(
+                new LoginBodyModel(registeredUserData.username, registeredUserData.password));
 
         PatchUserBodyModel patchData =
                 new PatchUserBodyModel(updatedUserData.username, null, null, null);
@@ -147,10 +139,8 @@ public class UpdateUserTests extends BaseTest {
                 registeredUserData.password
         ));
 
-        LoginBodyModel loginData =
-                new LoginBodyModel(registeredUserData.username, registeredUserData.password);
-
-        String accessToken = api.auth.loginAndGetAccessToken(loginData);
+        String accessToken = api.auth.loginAndGetAccessToken(
+                new LoginBodyModel(registeredUserData.username, registeredUserData.password));
 
         UpdateUserBodyModel updateData = new UpdateUserBodyModel("", "", "", "");
 
