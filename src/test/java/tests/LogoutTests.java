@@ -32,23 +32,18 @@ public class LogoutTests extends BaseTest {
     public void successfulLogoutTest() {
         api.users.register(new RegistrationBodyModel(userData.username, userData.password));
 
-        LoginBodyModel loginData =
-                new LoginBodyModel(userData.username, userData.password);
+        String refreshToken = api.auth.loginAndGetRefreshToken(
+                new LoginBodyModel(userData.username, userData.password));
 
-        String refreshToken = api.auth.loginAndGetRefreshToken(loginData);
-
-        LogoutBodyModel logoutData = new LogoutBodyModel(refreshToken);
-        api.auth.logout(logoutData);
+        api.auth.logout(new LogoutBodyModel(refreshToken));
     }
 
     @Test
     @Story("Негативный кейс на logout")
     @DisplayName("Logout без refresh token возвращает ошибку в поле refresh")
     public void logoutWithoutTokenTest() {
-        LogoutBodyModel logoutData = new LogoutBodyModel("");
-
         LogoutWithoutTokenBodyModel response =
-                api.auth.logoutWithoutToken(logoutData);
+                api.auth.logoutWithoutToken(new LogoutBodyModel(""));
 
         step("Проверить ошибку в поле refresh", () ->
                 assertThat(response.refresh()).containsExactly(EMPTY_CREDENTIALS_ERROR));
@@ -58,10 +53,8 @@ public class LogoutTests extends BaseTest {
     @Story("Негативный кейс на logout")
     @DisplayName("Logout с невалидным token возвращает ошибку token_not_valid")
     public void logoutWithWrongTokenTest() {
-        LogoutBodyModel logoutData = new LogoutBodyModel(WRONG_TOKEN);
-
         LogoutWithWrongTokenBodyModel response =
-                api.auth.logoutWithWrongToken(logoutData);
+                api.auth.logoutWithWrongToken(new LogoutBodyModel(WRONG_TOKEN));
 
         step("Проверить ошибку невалидного token", () -> {
             assertThat(response.detail()).isEqualTo(INVALID_TOKEN_DETAIL_ERROR);
@@ -75,14 +68,11 @@ public class LogoutTests extends BaseTest {
     public void logoutWithAccessTokenTest() {
         api.users.register(new RegistrationBodyModel(userData.username, userData.password));
 
-        LoginBodyModel loginData =
-                new LoginBodyModel(userData.username, userData.password);
+        String accessToken = api.auth.loginAndGetAccessToken(
+                new LoginBodyModel(userData.username, userData.password));
 
-        String accessToken = api.auth.loginAndGetAccessToken(loginData);
-
-        LogoutBodyModel logoutData = new LogoutBodyModel(accessToken);
         LogoutWithWrongTokenBodyModel response =
-                api.auth.logoutWithWrongToken(logoutData);
+                api.auth.logoutWithWrongToken(new LogoutBodyModel(accessToken));
 
         step("Проверить ошибку token wrong type", () -> {
             assertThat(response.detail()).isEqualTo(TOKEN_WRONG_TYPE_ERROR);
