@@ -27,11 +27,8 @@ public class LoginTests extends BaseTest {
     public void successfulLoginTest() {
         api.users.register(new RegistrationBodyModel(userData.username, userData.password));
 
-        LoginBodyModel loginData =
-                new LoginBodyModel(userData.username, userData.password);
-
         SuccessfulLoginResponseModel loginResponse =
-                api.auth.login(loginData);
+                api.auth.login(new LoginBodyModel(userData.username, userData.password));
 
         step("Проверить access и refresh токены", () -> {
             String actualAccess = loginResponse.access();
@@ -46,59 +43,52 @@ public class LoginTests extends BaseTest {
     @Test
     @DisplayName("Логин с неверным паролем возвращает ошибку")
     public void wrongPasswordLoginTest() {
-        LoginBodyModel loginData = new LoginBodyModel(LOGIN_USERNAME, WRONG_PASSWORD);
+        WrongLoginResponseModel loginResponse = api.auth.loginWrongCredentials(
+                new LoginBodyModel(LOGIN_USERNAME, WRONG_PASSWORD));
 
-        WrongLoginResponseModel loginResponse = api.auth.loginWrongCredentials(loginData);
-
-        String expectedDetailError = LOGIN_WRONG_CREDENTIALS_ERROR;
-        String actualDetailError = loginResponse.detail();
-        assertThat(actualDetailError).isEqualTo(expectedDetailError);
+        step("Проверить сообщение об ошибке авторизации", () ->
+                assertThat(loginResponse.detail()).isEqualTo(LOGIN_WRONG_CREDENTIALS_ERROR));
     }
 
     @Test
     @DisplayName("Логин с несуществующим username возвращает ошибку")
     public void wrongUserNameLoginTest() {
-        LoginBodyModel loginData = new LoginBodyModel(userData.username, LOGIN_PASSWORD);
+        WrongLoginResponseModel loginResponse = api.auth.loginWrongCredentials(
+                new LoginBodyModel(userData.username, LOGIN_PASSWORD));
 
-        WrongLoginResponseModel loginResponse = api.auth.loginWrongCredentials(loginData);
-
-        String expectedDetailError = LOGIN_WRONG_CREDENTIALS_ERROR;
-        String actualDetailError = loginResponse.detail();
-        assertThat(actualDetailError).isEqualTo(expectedDetailError);
+        step("Проверить сообщение об ошибке авторизации", () ->
+                assertThat(loginResponse.detail()).isEqualTo(LOGIN_WRONG_CREDENTIALS_ERROR));
     }
 
     @Test
     @DisplayName("Логин без username возвращает ошибку в поле username")
     public void withoutUserNameTest() {
-        LoginBodyModel loginData = new LoginBodyModel("", LOGIN_PASSWORD);
+        EmptyLoginResponseModel loginResponse = api.auth.emptyLoginCredentials(
+                new LoginBodyModel("", LOGIN_PASSWORD));
 
-        EmptyLoginResponseModel loginResponse = api.auth.emptyLoginCredentials(loginData);
-
-        String expectedDetailError = EMPTY_CREDENTIALS_ERROR;
-        String actualDetailError = loginResponse.username().get(0);
-        assertThat(actualDetailError).isEqualTo(expectedDetailError);
+        step("Проверить ошибку в поле username", () ->
+                assertThat(loginResponse.username()).containsExactly(EMPTY_CREDENTIALS_ERROR));
     }
 
     @Test
     @DisplayName("Логин без password возвращает ошибку в поле password")
     public void withoutPasswordTest() {
-        LoginBodyModel loginData = new LoginBodyModel(LOGIN_USERNAME, "");
+        EmptyPasswordResponseModel loginResponse = api.auth.emptyPasswordResponseModel(
+                new LoginBodyModel(LOGIN_USERNAME, ""));
 
-        EmptyPasswordResponseModel loginResponse = api.auth.emptyPasswordResponseModel(loginData);
-
-        String expectedDetailError = EMPTY_CREDENTIALS_ERROR;
-        String actualDetailError = loginResponse.password().get(0);
-        assertThat(actualDetailError).isEqualTo(expectedDetailError);
+        step("Проверить ошибку в поле password", () ->
+                assertThat(loginResponse.password()).containsExactly(EMPTY_CREDENTIALS_ERROR));
     }
 
     @Test
     @DisplayName("Логин без username и password возвращает две ошибки")
     public void withoutPasswordAndLoginTest() {
-        LoginBodyModel loginData = new LoginBodyModel("", "");
+        EmptyPasswordAndLoginResponseModel response = api.auth.emptyPasswordAndLogin(
+                new LoginBodyModel("", ""));
 
-        EmptyPasswordAndLoginResponseModel emptyPasswordAndLogin = api.auth.emptyPasswordAndLogin(loginData);
-
-        assertThat(emptyPasswordAndLogin.username()).containsExactly(EMPTY_CREDENTIALS_ERROR);
-        assertThat(emptyPasswordAndLogin.password()).containsExactly(EMPTY_CREDENTIALS_ERROR);
+        step("Проверить ошибки в полях username и password", () -> {
+            assertThat(response.username()).containsExactly(EMPTY_CREDENTIALS_ERROR);
+            assertThat(response.password()).containsExactly(EMPTY_CREDENTIALS_ERROR);
+        });
     }
 }
